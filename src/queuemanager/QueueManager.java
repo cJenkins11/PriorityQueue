@@ -126,7 +126,6 @@ public class QueueManager {
             } else if (input.toLowerCase().charAt(0) == 'p') {
 
                 /* Print out the entire queue (in no particular order) */
-                //System.out.println("test");
                 System.out.println(q);
             }
 

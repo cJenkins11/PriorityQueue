@@ -76,10 +76,8 @@ public class UnsortedLinkedPriorityQueue<T> implements PriorityQueue<T> {
         for (Node<T> node = head; node != null; node = node.getNext()) {
             if (node != head) {
                 result += ", ";
-                //System.out.println("Node was not the head node");
             }
             result += node.getItem();
-            //System.out.println("Node item added to result string");
         }
 
         result = result + "]";
