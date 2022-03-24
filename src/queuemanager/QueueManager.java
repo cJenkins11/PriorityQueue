@@ -26,15 +26,33 @@ public class QueueManager {
         String input = stdin.nextLine();
 
         /* Select implementation version to use */
+
         switch (input.toLowerCase()) {
             case "sa":
                 q = new SortedArrayPriorityQueue<>(8);
                 System.out.println("Using a sorted array.");
                 break;
+
             case "ua":
+                q = new UnsortedArrayPriorityQueue<>(8);
+                System.out.println("Using a sorted array.");
+                break;
+
             case "sl":
+                q = new SortedLinkedPriorityQueue<>();
+                System.out.println("Using a sorted linked list.");
+                break;
+
             case "ul":
+                q = new UnsortedLinkedPriorityQueue<>();
+                System.out.println("Using an unsorted linked list.");
+                break;
+
             case "h":
+                q = new HeapPriorityQueue<>(8);
+                System.out.println("Using a sorted array.");
+                break;
+
             default:
                 q = new SortedArrayPriorityQueue<>(8);
                 System.out.println("Invalid choice, using sorted array.");
@@ -55,37 +73,46 @@ public class QueueManager {
 
         /* Main loop */
         while (!input.toLowerCase().equals("q")) {
+
             if (input.toLowerCase().charAt(0) == 'a') {
 
                 /* Add an item to the queue */
-                String name = input.substring(2, input.lastIndexOf(' '));
-                Person person = new Person(name);
-                int priority = Integer.parseInt(input.substring(input.lastIndexOf(' ') + 1));
-                System.out.println("Adding " + person.getName() + " with priority " + priority);
                 try {
+
+                    String name = input.substring(2, input.lastIndexOf(' '));
+                    Person person = new Person(name);
+                    int priority = Integer.parseInt(input.substring(input.lastIndexOf(' ') + 1));
+                    System.out.println("Adding " + person.getName() + " with priority " + priority);
                     q.add(person, priority);
+
+                } catch (StringIndexOutOfBoundsException e) {
+                    System.out.println("Add operation failed: Command error - " + e);
                 } catch (QueueOverflowException e) {
                     System.out.println("Add operation failed: " + e);
                 }
+
+
             } else if (input.toLowerCase().charAt(0) == 'h') {
 
                 /* Display the item at the head of the queue */
                 try {
-                    String name = q.head().getName();
-                    System.out.println("The person at the head of the queue is " + name);
+                    System.out.println("The person at the head of the queue is " + q.head());
                 } catch (QueueUnderflowException e) {
                     System.out.println("Can't get head of queue: " + e);
                 }
+
+
             } else if (input.toLowerCase().charAt(0) == 'r') {
 
                 /* Remove the item at the head of the queue */
                 try {
-                    String name = q.head().getName();
-                    System.out.println("Removing " + name + " from the head of the queue");
+                    System.out.println("Removing " + q.head() + " from the head of the queue");
                     q.remove();
                 } catch (QueueUnderflowException e) {
                     System.out.println("Can't remove head of queue: " + e);
                 }
+
+
             } else if (input.toLowerCase().charAt(0) == 'e') {
 
                 /* Report if the queue is empty or not */
@@ -94,14 +121,20 @@ public class QueueManager {
                 } else {
                     System.out.println("The queue is NOT empty");
                 }
+
+
             } else if (input.toLowerCase().charAt(0) == 'p') {
 
                 /* Print out the entire queue (in no particular order) */
+                //System.out.println("test");
                 System.out.println(q);
             }
+
+
             System.out.print("> ");
             input = stdin.nextLine();
         }
+
         System.out.println("Bye");
     }
 }

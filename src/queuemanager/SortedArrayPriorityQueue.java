@@ -62,10 +62,11 @@ public class SortedArrayPriorityQueue<T> implements PriorityQueue<T> {
             /* No resizing implemented, but that would be a good enhancement. */
             tailIndex = tailIndex - 1;
             throw new QueueOverflowException();
+
         } else {
             /* Scan backwards looking for insertion point */
             int i = tailIndex;
-            while (i > 0 && ((PriorityItem<T>) storage[i - 1]).getPriority() < priority) {
+            while (i > 0 && ((PriorityItem<T>) storage[i - 1]).getPriority() > priority) {
                 storage[i] = storage[i - 1];
                 i = i - 1;
             }
