@@ -26,7 +26,7 @@ public class SortedLinkedPriorityQueue<T> implements PriorityQueue<T> {
 
 
     @Override
-    public void add(T item, int priority) throws QueueOverflowException, StringIndexOutOfBoundsException {
+    public void add(T item, int priority) throws StringIndexOutOfBoundsException {
 
         PriorityItem<T> newItem = new PriorityItem<>(item, priority);
 

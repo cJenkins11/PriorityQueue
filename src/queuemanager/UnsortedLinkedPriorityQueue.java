@@ -18,20 +18,32 @@ package queuemanager;
  */
 public class UnsortedLinkedPriorityQueue<T> implements PriorityQueue<T> {
 
-    private  Node<T> head;
-    //private int size;
+    private  Node<T> head, tail;
 
     public UnsortedLinkedPriorityQueue() {
         head = null;
-        //size = 0;
+        tail = null;
     }
 
 
     @Override
-    public void add(T item, int priority) throws QueueOverflowException, StringIndexOutOfBoundsException {
+    public void add(T item, int priority) throws StringIndexOutOfBoundsException {
 
         PriorityItem<T> newItem = new PriorityItem<>(item, priority);
-        head = new Node(newItem, head);
+        Node node = new Node(newItem, head);
+
+        if (head == null) {
+            head = tail = node;
+            head.setPrevious(null);
+            tail.setNext(null);
+        } else {
+
+            tail.setNext(node);
+            node.setPrevious(tail);
+            tail = node;
+            tail.setNext(null);
+
+        }
     }
 
     @Override
@@ -39,7 +51,32 @@ public class UnsortedLinkedPriorityQueue<T> implements PriorityQueue<T> {
         if (isEmpty()) {
             throw new QueueUnderflowException();
         }
-        return head.getItem();
+        Node temp = head;
+        Node previous = null;
+        Node highPriority = null;
+        int priority = (int) Double.POSITIVE_INFINITY;
+
+        while (temp != null) {
+
+            if (((PriorityItem)temp.getItem()).getPriority() < priority) {
+
+                //System.out.println("found item with higher priority");
+                highPriority = temp;
+                previous = temp;
+                temp = temp.getNext();
+
+            } else {
+
+                previous = temp;
+                temp = temp.getNext();
+            }
+
+            if (highPriority != null) {
+                priority = ((PriorityItem) highPriority.getItem()).getPriority();
+            }
+        }
+
+        return (T) highPriority.getItem();
     }
 
     @Override
@@ -48,19 +85,50 @@ public class UnsortedLinkedPriorityQueue<T> implements PriorityQueue<T> {
             throw new QueueUnderflowException();
         }
 
-        /*Node temp = head;
+        Node temp = head;
         Node previous = null;
-        int priority = (int) Double.POSITIVE_INFINITY;*/
+        Node<T> highPriority = null;
+        int priority = (int) Double.POSITIVE_INFINITY;
 
-        /*while (temp != null && ((PriorityItem)temp.getItem()).getPriority() <= priority) {
+        while (temp != null) {
 
-            previous = temp;
-            temp = temp.getNext();
-        }*/
+            if (((PriorityItem)temp.getItem()).getPriority() < priority) {
+
+                highPriority = temp;
+
+                temp = temp.getNext();
+
+            } else {
 
 
+                temp = temp.getNext();
+            }
 
-        head = head.getNext();
+            if (highPriority != null) {
+                priority = ((PriorityItem) highPriority.getItem()).getPriority();
+            }
+        }
+
+        Node before = highPriority.getPrevious();
+        Node after = highPriority.getNext();
+
+        if (before == null && after == null) {
+
+            head = null;
+
+        } else {
+
+            if (after == null) {
+                before.setNext(null);
+
+            } else if (before == null) {
+                after.setPrevious(null);
+
+            } else {
+                before.setNext(after);
+                after.setPrevious(before);
+            }
+        }
     }
 
     @Override
