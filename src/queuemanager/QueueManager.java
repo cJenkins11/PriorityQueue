@@ -50,7 +50,7 @@ public class QueueManager {
 
             case "h":
                 q = new HeapPriorityQueue<>(8);
-                System.out.println("Using a sorted array.");
+                System.out.println("Using a heap.");
                 break;
 
             default:

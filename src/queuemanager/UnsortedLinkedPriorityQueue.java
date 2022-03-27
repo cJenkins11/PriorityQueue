@@ -90,17 +90,12 @@ public class UnsortedLinkedPriorityQueue<T> implements PriorityQueue<T> {
         Node<T> highPriority = null;
         int priority = (int) Double.POSITIVE_INFINITY;
 
+        //Search for highest priority item within each node
         while (temp != null) {
-
             if (((PriorityItem)temp.getItem()).getPriority() < priority) {
-
                 highPriority = temp;
-
                 temp = temp.getNext();
-
             } else {
-
-
                 temp = temp.getNext();
             }
 
@@ -109,25 +104,35 @@ public class UnsortedLinkedPriorityQueue<T> implements PriorityQueue<T> {
             }
         }
 
+        //Check position of target node
         Node before = highPriority.getPrevious();
         Node after = highPriority.getNext();
 
+        //Condition: last node
         if (before == null && after == null) {
 
             head = null;
 
-        } else {
-
-            if (after == null) {
+        }
+        //Condition: node at start or end
+        else if (after == null || before == null) {
+            //Target at tail
+            if (after == null && before != null){
                 before.setNext(null);
 
-            } else if (before == null) {
-                after.setPrevious(null);
-
-            } else {
-                before.setNext(after);
-                after.setPrevious(before);
             }
+            //Target at head
+            else if (before == null && after != null) {
+                head = head.getNext();
+                head.setPrevious(null);
+            }
+
+
+        }
+        //Condition: Target node between two other nodes
+        else {
+            before.setNext(after);
+            after.setPrevious(before);
         }
     }
 

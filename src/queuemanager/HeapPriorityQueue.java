@@ -35,15 +35,66 @@ public class HeapPriorityQueue<T> implements PriorityQueue<T> {
      */
     private int tailIndex;
 
+    private int size;
+
+    private final int START = 1;
+
+
     /**
      * Create a new empty queue of the given size.
      *
      * @param size
      */
     public HeapPriorityQueue(int size) {
-        storage = new Object[size];
         capacity = size;
-        tailIndex = -1;
+        this.size = 0;
+        storage = new Object[capacity + 1];
+    }
+
+    private int getParent(int position) {
+        return position/2;
+    }
+
+    private int leftChild(int position) {
+        return position*2;
+    }
+
+    private int rightChild(int position) {
+        return (position*2) + 1;
+    }
+
+    private boolean isLeaf(int position) {
+        if (position > (size/2) && position <= size) {
+            return true;
+        }
+        return false;
+    }
+
+    private void swap(int positionA, int positionB) {
+        Object temp;
+        temp = storage[positionA];
+
+        storage[positionA] = storage[positionB];
+        storage[positionB] = temp;
+    }
+
+    private void minHeapify(int position) {
+
+        if (isLeaf(position)) {return;}
+
+        int left = leftChild(position);
+        int right = rightChild(position);
+
+        int smallest = left;
+
+        if (right <= size && ((PriorityItem)storage[right]).getPriority() < ((PriorityItem)storage[left]).getPriority()) {
+            smallest = right;
+        }
+
+        if (((PriorityItem)storage[position]).getPriority() > ((PriorityItem)storage[smallest]).getPriority()) {
+            swap(position, smallest);
+            minHeapify(smallest);
+        }
     }
 
     @Override
@@ -51,27 +102,23 @@ public class HeapPriorityQueue<T> implements PriorityQueue<T> {
         if (isEmpty()) {
             throw new QueueUnderflowException();
         } else {
-            return ((PriorityItem<T>) storage[0]).getItem();
+            return ((PriorityItem<T>) storage[START]).getItem();
         }
     }
 
     @Override
     public void add(T item, int priority) throws QueueOverflowException {
-        tailIndex = tailIndex + 1;
-        if (tailIndex >= capacity) {
-            /* No resizing implemented, but that would be a good enhancement. */
-            tailIndex = tailIndex - 1;
-            throw new QueueOverflowException();
 
-        } else {
-            /* Scan backwards looking for insertion point */
-            int i = tailIndex;
-            while (i > 0 && ((PriorityItem<T>) storage[i - 1]).getPriority() < priority) {
-                storage[i] = storage[i - 1];
-                i = i - 1;
-            }
-            storage[i] = new PriorityItem<>(item, priority);
+        storage[++size] = new PriorityItem(item, priority);
+        int current = size;
+
+        while (current > 1 && ((PriorityItem)storage[current]).getPriority() < ((PriorityItem)storage[getParent(current)]).getPriority()) {
+
+            swap(current, getParent(current));
+            current = getParent(current);
+
         }
+
     }
 
     @Override
@@ -79,10 +126,10 @@ public class HeapPriorityQueue<T> implements PriorityQueue<T> {
         if (isEmpty()) {
             throw new QueueUnderflowException();
         } else {
-            for (int i = 0; i < tailIndex; i++) {
-                storage[i] = storage[i + 1];
-            }
-            tailIndex = tailIndex - 1;
+
+            storage[START] = storage[size--];
+            minHeapify(START);
+
         }
     }
 
@@ -93,14 +140,12 @@ public class HeapPriorityQueue<T> implements PriorityQueue<T> {
 
     @Override
     public String toString() {
-        String result = "[";
-        for (int i = 0; i <= tailIndex; i++) {
-            if (i > 0) {
-                result = result + ", ";
-            }
-            result = result + storage[i];
+        String result = "";
+
+        for (int i = 1; i <= ((size/2)); i++) {
+            result += "Parent: " + storage[i] + "\nLeft child: " + storage[i*2] + "- Right child: " + storage[(i*2)+1] + "\n";
         }
-        result = result + "]";
+
         return result;
     }
 }
