@@ -1,18 +1,12 @@
 package queuemanager;
 
 /**
- * Implementation of the PriorityQueue ADT using a sorted array for storage.
+ * Implementation of the PriorityQueue ADT using a sorted singly linked list for storage.
  *
  * Because Java does not allow generic arrays (!), this is implemented as an
  * array of Object rather than of PriorityItem&lt;T&gt;, which would be natural.
  * Array elements accessed then have to be cast to PriorityItem&lt;T&gt; before
  * using their getItem() or getPriority() methods.
- * 
- * This is an example of Java's poor implementation getting in the way. Java
- * fanboys will no doubt explain at length why it has to be this way, but note
- * that Eiffel allows it because Eiffel generics were done right from the start,
- * rather than being tacked on as an afterthought and limited by issues of
- * backward compatibility. Humph!
  * 
  * @param <T> The type of things being stored.
  */

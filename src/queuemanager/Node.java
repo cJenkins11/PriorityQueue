@@ -2,7 +2,7 @@ package queuemanager;
 
 /**
  * Node class to store an item and a link to the next/previous node
- * Can be used a singly or doubly linked
+ * Can be used as a singly or doubly linked list
  *
  * @param <T> The type of object stored
  */

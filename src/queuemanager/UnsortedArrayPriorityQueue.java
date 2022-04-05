@@ -8,12 +8,6 @@ package queuemanager;
  * Array elements accessed then have to be cast to PriorityItem&lt;T&gt; before
  * using their getItem() or getPriority() methods.
  * 
- * This is an example of Java's poor implementation getting in the way. Java
- * fanboys will no doubt explain at length why it has to be this way, but note
- * that Eiffel allows it because Eiffel generics were done right from the start,
- * rather than being tacked on as an afterthought and limited by issues of
- * backward compatibility. Humph!
- * 
  * @param <T> The type of things being stored.
  */
 public class UnsortedArrayPriorityQueue<T> implements PriorityQueue<T> {
@@ -55,29 +49,17 @@ public class UnsortedArrayPriorityQueue<T> implements PriorityQueue<T> {
             int headIndex = -1;
             double headPriority = Double.POSITIVE_INFINITY;
 
-            //((PriorityItem)storage[storage.length - 1]).getPriority()
-
             for (int i = 0; i < storage.length; i++){
                 if (((PriorityItem)storage[i]) != null) {
                     if (((PriorityItem) storage[i]).getPriority() <= headPriority) {
                         headPriority = ((PriorityItem) storage[i]).getPriority();
                         headIndex = i;
-                        //System.out.println("less than max\nhead index: " + headIndex);
                     }
                 }
             }
 
             return ((PriorityItem<T>) storage[headIndex]).getItem();
 
-            /*for (int i = 0; i < storage.length - 1; i++) {
-
-                if (((PriorityItem<T>) storage[i]).getPriority() {
-
-                }
-
-            }*/
-
-            //return ((PriorityItem<T>) storage[0]).getItem();
         }
     }
 
@@ -92,11 +74,6 @@ public class UnsortedArrayPriorityQueue<T> implements PriorityQueue<T> {
             /* Insert at end */
             int i = tailIndex;
 
-            /*while (i > 0 && ((PriorityItem<T>) storage[i - 1]).getPriority() < priority) {
-                storage[i] = storage[i - 1];
-                i = i - 1;
-            }*/
-
             storage[i] = new PriorityItem<>(item, priority);
         }
     }
@@ -110,37 +87,20 @@ public class UnsortedArrayPriorityQueue<T> implements PriorityQueue<T> {
             int headIndex = -1;
             double headPriority = Double.POSITIVE_INFINITY;
 
-            //((PriorityItem)storage[storage.length - 1]).getPriority()
-
             for (int i = 0; i < storage.length; i++){
                 if (((PriorityItem)storage[i]) != null) {
                     if (((PriorityItem) storage[i]).getPriority() <= headPriority) {
                         headPriority = ((PriorityItem) storage[i]).getPriority();
                         headIndex = i;
-                        //System.out.println("less than max\nhead index: " + headIndex);
                     }
                 }
              }
-
-            //Object[] temp = new Object[storage.length - 1];
-
-            /*for (int i = 0, j= 0; i < storage.length; i++) {
-                if (i != headIndex) {
-                    temp[j++] = storage[i];
-                }
-            }*/
 
             for (int i = headIndex; i < storage.length - 1; i++) {
                 storage[i] = storage[i + 1];
             }
             tailIndex = tailIndex - 1;
 
-            //storage = temp;
-
-            /*for (int i = 0; i < tailIndex; i++) {
-                storage[i] = storage[i + 1];
-            }
-            tailIndex = tailIndex - 1;*/
         }
     }
 
